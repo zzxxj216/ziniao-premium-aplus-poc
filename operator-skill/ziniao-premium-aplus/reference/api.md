@@ -21,6 +21,21 @@
 }
 ```
 
+## POST /aplus/upload(图片不在服务端那台机器时必用)
+中心服务**只能读它自己那台机器上的路径**。当运营本机 ≠ 服务端机器时,**先把图片传上去**,拿到服务端路径,再在 spec 里用这些路径。
+```bash
+curl -s -X POST "$APLUS_BASE_URL/aplus/upload" -H "X-API-Key: $APLUS_API_KEY" \
+  -F "files=@/本地/桌面图.png" -F "files=@/本地/移动图.png"
+```
+返回:
+```json
+{"ok": true, "session": "ab12…", "dir": "/服务端/uploads/ab12…",
+ "paths": {"桌面图.png": "/服务端/uploads/ab12…/桌面图.png", "移动图.png": "/服务端/uploads/ab12…/移动图.png"}}
+```
+- 把返回的**服务端路径**填进 spec 的 `desktop`/`mobile`/`image`/`panels`/`images`。
+- 文件名含空格/中文都支持。HTTP 图片 URL **不**支持,必须先上传。
+- 同机部署(本机自测)可跳过此步,直接用本地路径。
+
 ## POST /aplus/create
 创建一篇高级 A+ 草稿。
 

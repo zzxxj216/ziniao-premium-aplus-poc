@@ -22,13 +22,19 @@
 5. 不满意改 spec 重建(草稿可反复改);满意后**用户手动提交审核**(并确认 AI 披露)。
 
 ## 调用方式(HTTP)
+**先传图(服务在别的机器时必做)**——中心服务只能读它自己机器上的路径:
+```bash
+curl -s -X POST "$APLUS_BASE_URL/aplus/upload" -H "X-API-Key: $APLUS_API_KEY" \
+  -F "files=@/本地/桌面图.png" -F "files=@/本地/移动图.png"
+# 返回 {"paths":{"桌面图.png":"/服务端/uploads/xxx/桌面图.png", ...}};把这些服务端路径填进 spec
+```
+再创建:
 ```bash
 curl -s -X POST "$APLUS_BASE_URL/aplus/create" \
-  -H "Content-Type: application/json" \
-  -H "X-API-Key: $APLUS_API_KEY" \
+  -H "Content-Type: application/json" -H "X-API-Key: $APLUS_API_KEY" \
   --data-binary @spec.json
 ```
-`GET $APLUS_BASE_URL/health` 可查服务是否在 + 支持的模块。
+`GET $APLUS_BASE_URL/health` 探活;同机部署可跳过上传、直接用本地路径。
 
 ## spec 格式(完整示例见 `reference/spec-examples.md`)
 ```json

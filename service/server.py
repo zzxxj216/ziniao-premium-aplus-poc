@@ -17,11 +17,15 @@ from multiprocessing import get_context
 from pathlib import Path
 from queue import Empty
 
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, File, Header, HTTPException, UploadFile
 from pydantic import BaseModel
 
 from aplus_api import create_aplus
 from ziniao_client import ZiniaoClient
+
+# 运营端图片传到这里(服务端本地),再在 spec 里用返回的服务端路径
+UPLOAD_DIR = os.environ.get("APLUS_UPLOAD_DIR") or os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "uploads")
 
 
 def _load_local_env():
@@ -76,6 +80,26 @@ def _check(key):
 @app.get("/health")
 def health():
     return {"ok": True, "supported_modules": SUPPORTED}
+
+
+@app.post("/aplus/upload")
+async def upload(files: list[UploadFile] = File(...), x_api_key: str = Header(default="")):
+    """运营端把本机图片传到服务端;返回服务端绝对路径(在 spec 里用这些路径)。
+    用法: curl -F files=@a.png -F files=@b.png $BASE/aplus/upload -H 'X-API-Key: ...'
+    """
+    _check(x_api_key)
+    import shutil, uuid
+    sess = uuid.uuid4().hex[:12]
+    dest_dir = os.path.join(UPLOAD_DIR, sess)
+    os.makedirs(dest_dir, exist_ok=True)
+    paths = {}
+    for f in files:
+        name = os.path.basename(f.filename or "file")
+        p = os.path.join(dest_dir, name)
+        with open(p, "wb") as out:
+            shutil.copyfileobj(f.file, out)
+        paths[f.filename] = p
+    return {"ok": True, "session": sess, "dir": dest_dir, "count": len(paths), "paths": paths}
 
 
 @app.get("/aplus/status")

@@ -30,3 +30,6 @@ service/webdriver/
 .DS_Store
 .idea/
 .vscode/
+
+# 运营上传的图片(服务端运行时)
+service/uploads/
