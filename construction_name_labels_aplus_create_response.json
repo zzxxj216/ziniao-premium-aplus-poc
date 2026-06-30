@@ -1,0 +1,138 @@
+{
+  "ok": true,
+  "name": "Construction Name Labels Premium A+",
+  "store": "Inkelligent",
+  "url": "https://sellercentral.amazon.com/enhanced-content/content-manager/workflow/ebc-premium/content/4d5803e0-2eef-4cb2-ac68-823be02ce61c/revision/1782789456996/edit",
+  "named": true,
+  "modules": [
+    {
+      "type": "完整图片",
+      "ok": true,
+      "images": 1,
+      "mobile_images": 1,
+      "texts": 0,
+      "bodies": 0,
+      "keyed": null,
+      "video": null,
+      "hotspots": null,
+      "styled": null
+    },
+    {
+      "type": "完整图片",
+      "ok": true,
+      "images": 1,
+      "mobile_images": 1,
+      "texts": 0,
+      "bodies": 0,
+      "keyed": null,
+      "video": null,
+      "hotspots": null,
+      "styled": null
+    },
+    {
+      "type": "轮播",
+      "variant": "简单",
+      "ok": true,
+      "panels": [
+        {
+          "panel": 1,
+          "image": true,
+          "video": null,
+          "texts": 0,
+          "bodies": 0
+        },
+        {
+          "panel": 2,
+          "image": true,
+          "video": null,
+          "texts": 0,
+          "bodies": 0
+        },
+        {
+          "panel": 3,
+          "image": true,
+          "video": null,
+          "texts": 0,
+          "bodies": 0
+        },
+        {
+          "panel": 4,
+          "image": true,
+          "video": null,
+          "texts": 0,
+          "bodies": 0
+        }
+      ]
+    },
+    {
+      "type": "轮播",
+      "variant": "简单",
+      "ok": true,
+      "panels": [
+        {
+          "panel": 1,
+          "image": true,
+          "video": null,
+          "texts": 0,
+          "bodies": 0
+        },
+        {
+          "panel": 2,
+          "image": true,
+          "video": null,
+          "texts": 0,
+          "bodies": 0
+        },
+        {
+          "panel": 3,
+          "image": true,
+          "video": null,
+          "texts": 0,
+          "bodies": 0
+        }
+      ]
+    },
+    {
+      "type": "完整图片",
+      "ok": true,
+      "images": 1,
+      "mobile_images": 1,
+      "texts": 0,
+      "bodies": 0,
+      "keyed": null,
+      "video": null,
+      "hotspots": null,
+      "styled": null
+    },
+    {
+      "type": "技术规格",
+      "ok": true,
+      "images": 0,
+      "mobile_images": 0,
+      "texts": 11,
+      "bodies": 0,
+      "keyed": null,
+      "video": null,
+      "hotspots": null,
+      "styled": {
+        "layout": true
+      }
+    },
+    {
+      "type": "问答",
+      "ok": true,
+      "images": 0,
+      "mobile_images": 0,
+      "texts": 8,
+      "bodies": 0,
+      "keyed": null,
+      "video": null,
+      "hotspots": null,
+      "styled": {
+        "color": true
+      }
+    }
+  ],
+  "warnings": null,
+  "validation_failed": false
+}

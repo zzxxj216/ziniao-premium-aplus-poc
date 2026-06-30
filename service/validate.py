@@ -144,9 +144,35 @@ def validate_spec(spec):
 
 
 ALT_MAX = 100
-TITLE_MAX = 80      # 标题/headline
-SUBTITLE_MAX = 40   # 副标题/subheadline
-BODY_MAX = 350      # 正文/body(「文本」模块除外,可到 5000)
+# 各模块字段字数上限(2026-06 实测自英文编辑器计数器)
+FIELD_LIMITS = {
+    "完整图片": {"title": 80, "body": 300},
+    "单图文":   {"title": 80, "subtitle": 40, "body": 500},
+    "双图":     {"title": 50, "body": 300},
+    "四图":     {"title": 80, "subtitle": 30, "body": 150},   # 模块标题80;每图小标题30/正文150
+    "文本":     {"title": 80, "body": 5000},
+    "背景图片": {"title": 60, "subtitle": 40, "body": 300},
+    "技术规格": {"title": 80},                                  # 规格名30/定义500 在 texts 里另查
+    "视频":     {"title": 80, "body": 300},
+    "含文本视频": {"title": 80, "subtitle": 40, "body": 500},
+    "对比表1":  {"title": 80, "img_title": 25},
+    "对比表2":  {"title": 80, "img_title": 30, "body": 80},
+    "对比表3":  {"title": 25, "img_title": 25},
+    "热点2":    {"title": 80, "body": 300},
+}
+CAROUSEL_LIMITS = {
+    "简单":     {"title": 80, "ptext": 50, "pbody": 200},
+    "规则":     {"title": 100, "ptext": 20, "pbody": 100, "nav": 20},
+    "导航":     {"title": 50, "nav": 25, "subtitle": 25, "pbody": 100},
+    "视频图像": {"title": 80, "ptext": 50, "subtitle": 80, "pbody": 500},
+}
+QA_Q, QA_A = 120, 250        # 问答:问题120/回答250
+TS_SPEC, TS_DEF = 30, 500    # 技术规格:规格名30/定义500
+
+
+def _warn_len(warns, tag, label, val, limit):
+    if val and limit and len(str(val)) > limit:
+        warns.append(f"{tag}: {label} 长 {len(str(val))} 超 {limit},会截断")
 
 
 def _collect_alts(m):
@@ -170,8 +196,7 @@ def _collect_alts(m):
 
 
 def spec_warnings(spec):
-    """非阻塞提示(不挡创建,字段超长上传时会按 maxlength 截断):
-    alt≤100、标题≤80、副标题≤40、正文≤350(「文本」模块正文不限到此)。"""
+    """非阻塞提示(不挡创建,字段超长上传时会按各字段真实上限截断)。按模块实测上限检查。"""
     warns = []
     for i, m in enumerate(spec.get("modules") or []):
         t = m.get("type")
@@ -179,19 +204,41 @@ def spec_warnings(spec):
         for a in _collect_alts(m):
             if len(a) > ALT_MAX:
                 warns.append(f"{tag}: alt 长 {len(a)} 超 {ALT_MAX},会截断 → '{a[:40]}…'")
-        # 标题(keyed title + 各面板若按 [文本,导航文本] 也算标题类)
-        if m.get("title") and len(m["title"]) > TITLE_MAX:
-            warns.append(f"{tag}: 标题 长 {len(m['title'])} 超 {TITLE_MAX},会截断")
-        if m.get("subtitle") and len(m["subtitle"]) > SUBTITLE_MAX:
-            warns.append(f"{tag}: 副标题 长 {len(m['subtitle'])} 超 {SUBTITLE_MAX},会截断")
-        # 正文(keyed body + bodies[]);「文本」模块正文可到 5000,跳过
-        if t != "文本":
-            bodies = ([m["body"]] if m.get("body") else []) + list(m.get("bodies") or [])
-            for p in (m.get("panels") or []):
-                bodies += list(p.get("bodies") or [])
-            for b in bodies:
-                if len(b) > BODY_MAX:
-                    warns.append(f"{tag}: 正文 长 {len(b)} 超 {BODY_MAX},会截断")
+
+        if t == "轮播":
+            lim = CAROUSEL_LIMITS.get(m.get("variant", "简单"), {})
+            _warn_len(warns, tag, "模块标题", m.get("title"), lim.get("title"))
+            for pi, p in enumerate(m.get("panels") or []):
+                ptag = f"{tag}面板{pi+1}"
+                for tx in (p.get("texts") or []):
+                    _warn_len(warns, ptag, "面板文本", tx, lim.get("ptext") or lim.get("pbody"))
+                for bd in (p.get("bodies") or []):
+                    _warn_len(warns, ptag, "面板正文", bd, lim.get("pbody"))
+            continue
+
+        if t == "问答":
+            for k, v in enumerate(m.get("texts") or []):
+                _warn_len(warns, tag, "问题" if k % 2 == 0 else "回答", v, QA_Q if k % 2 == 0 else QA_A)
+            continue
+
+        if t == "技术规格":
+            for k, v in enumerate(m.get("texts") or []):
+                if k == 0:
+                    _warn_len(warns, tag, "标题", v, 80)
+                elif k % 2 == 1:
+                    _warn_len(warns, tag, "规格名", v, TS_SPEC)
+                else:
+                    _warn_len(warns, tag, "定义", v, TS_DEF)
+            continue
+
+        lim = FIELD_LIMITS.get(t, {})
+        _warn_len(warns, tag, "标题", m.get("title"), lim.get("title"))
+        _warn_len(warns, tag, "副标题", m.get("subtitle"), lim.get("subtitle"))
+        _warn_len(warns, tag, "正文", m.get("body"), lim.get("body"))
+        for bd in (m.get("bodies") or []):
+            _warn_len(warns, tag, "正文", bd, lim.get("body"))
+        for it in (m.get("img_titles") or []):
+            _warn_len(warns, tag, "图片标题", it, lim.get("img_title"))
     return warns
 
 

@@ -83,6 +83,37 @@
           "alt": "Construction label size guide for mini standard water bottle and clothing labels"
         }
       ]
+    },
+    {
+      "type": "技术规格",
+      "layout": "两表",
+      "texts": [
+        "Compare Construction Name Labels",
+        "Best for bottles",
+        "Waterproof sticker labels help identify water bottles, lunch boxes, pencil cases, and school supplies.",
+        "Best for clothing",
+        "Laundry-safe clothing labels are made for shirts, jackets, uniforms, and daycare outfits.",
+        "Design style",
+        "Construction trucks, cranes, cones, and job-site graphics make each label fun and easy to spot.",
+        "Personalized use",
+        "Add a child's name to help prevent mix-ups at school, camp, daycare, travel, and activities.",
+        "Daily durability",
+        "Made for busy family routines, from washing and organizing to packing school essentials."
+      ]
+    },
+    {
+      "type": "问答",
+      "background": "白",
+      "texts": [
+        "Are these labels waterproof?",
+        "Yes. The sticker labels are designed for items such as water bottles, lunch boxes, and school supplies.",
+        "Can the clothing labels go through laundry?",
+        "Yes. The clothing label designs highlight laundry-safe use for everyday kids' clothes and school outfits.",
+        "Can I personalize the labels with a name?",
+        "Yes. The A+ images show personalized name labels made for kids, school, daycare, camp, and home organization.",
+        "Which items can I use them on?",
+        "Use them on bottles, backpacks, lunch boxes, pencil cases, clothing, jackets, and other daily essentials."
+      ]
     }
   ]
 }
