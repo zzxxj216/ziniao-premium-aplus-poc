@@ -1,0 +1,88 @@
+{
+  "store": "inkelligent",
+  "name": "Construction Name Labels Premium A+",
+  "modules": [
+    {
+      "type": "完整图片",
+      "ai_generated": true,
+      "images": [
+        {
+          "desktop": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_21 (1).png",
+          "mobile": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_41 (1).png",
+          "alt": "Construction-themed personalized name labels with truck designs"
+        }
+      ]
+    },
+    {
+      "type": "完整图片",
+      "ai_generated": true,
+      "images": [
+        {
+          "desktop": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_25 (6).png",
+          "mobile": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_45 (10).png",
+          "alt": "Construction vehicle name label design choices"
+        }
+      ]
+    },
+    {
+      "type": "轮播",
+      "variant": "简单",
+      "ai_generated": true,
+      "panels": [
+        {
+          "desktop": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_26 (7).png",
+          "mobile": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_42 (2).png",
+          "alt": "Personalized construction sticker labels for kids"
+        },
+        {
+          "desktop": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_25 (5).png",
+          "mobile": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_44 (7).png",
+          "alt": "Personalized construction clothing labels"
+        },
+        {
+          "desktop": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_24 (4).png",
+          "mobile": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_42 (3).png",
+          "alt": "Personalized labels for school essentials"
+        },
+        {
+          "desktop": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_27 (9).png",
+          "mobile": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_44 (9).png",
+          "alt": "Construction theme labels for everyday essentials"
+        }
+      ]
+    },
+    {
+      "type": "轮播",
+      "variant": "简单",
+      "ai_generated": true,
+      "panels": [
+        {
+          "desktop": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_22 (2).png",
+          "mobile": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_43 (6).png",
+          "alt": "Laundry-safe construction labels for clothing"
+        },
+        {
+          "desktop": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_23 (3).png",
+          "mobile": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_43 (5).png",
+          "alt": "Waterproof and durable construction name labels"
+        },
+        {
+          "desktop": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_28 (10).png",
+          "mobile": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_42 (4).png",
+          "alt": "Easy-to-use peel stick and organize construction labels"
+        }
+      ]
+    },
+    {
+      "type": "完整图片",
+      "ai_generated": true,
+      "images": [
+        {
+          "desktop": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_26 (8).png",
+          "mobile": "/Users/zane/Desktop/CONSTRUCTION/A+/ChatGPT Image 2026年6月29日 15_34_44 (8).png",
+          "alt": "Construction label size guide for mini standard water bottle and clothing labels"
+        }
+      ]
+    }
+  ]
+}

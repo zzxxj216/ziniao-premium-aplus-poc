@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+!**/.env.example
+*.local
+service/config.yaml
+
+# Generated exploration assets
+.imgcache/
+service/.imgcache/
+service/scratch/
+
+# Local browser drivers / binaries
+service/webdriver/
+
+# OS/editor noise
+.DS_Store
+.idea/
+.vscode/
