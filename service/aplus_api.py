@@ -249,6 +249,17 @@ return deepAll(function(n){
 # 对比表产品标题的 placeholder(比较表2=Image Headline;比较表1/3=Title)
 CMP_TITLE_PH = ["enter image headline", "image headline", "输入图片标题文本", "图片标题",
                 "enter title", "输入产品标题", "产品标题"]
+JS_CMP_TITLE_FILLED = DEEP + """
+var subs=arguments[0],n=0;
+deepAll(function(x){
+  if(x.tagName!=='INPUT'&&x.tagName!=='TEXTAREA') return false;
+  if(!(x.value||'').trim()) return false;
+  var ph=((x.placeholder||'')+' '+((x.getAttribute&&x.getAttribute('aria-label'))||'')).toLowerCase();
+  for(var i=0;i<subs.length;i++){ if(ph.indexOf((''+subs[i]).toLowerCase())>=0) return true; }
+  return false;
+}).forEach(function(){n++;});
+return n;
+"""
 
 
 def _fill_titles_clear(driver, values, exclude=None):
@@ -551,11 +562,20 @@ def create_aplus(spec, cfg_path=None):
                 # 对比表:只填 ASIN → 亚马逊自动拉取图片+标题;拉来的标题过长 → 清空改短标题
                 if m.get("asins"):
                     _fill_by_ph(driver, "输入ASIN", m["asins"], exclude=excl)
-                    time.sleep(6)                          # 等按 ASIN 自动拉取图片+标题
                     names = m.get("names") or m.get("img_titles")   # 运营给的短标题(≤25/30)
                     if names:
+                        # 轮询等标题自动拉取完成(变非空)再改,避免异步拉取覆盖我们填的短标题
+                        need = min(len(names), len(m["asins"]))
+                        end = time.time() + 20
+                        while time.time() < end:
+                            if driver.execute_script(JS_CMP_TITLE_FILLED, CMP_TITLE_PH) >= need:
+                                break
+                            time.sleep(1)
+                        time.sleep(2)                       # 让全部拉取稳定
                         cleared = _fill_titles_clear(driver, names, exclude=excl)
                         print(f"    对比表短标题填入={cleared}")
+                    else:
+                        time.sleep(5)
             # 再传图(背景图片用专属触发文案;排除前模块空图位)
             trigger = TRIGGER_MAP.get(m["type"], "点击添加图片")
             imgs = module_image_items(m)
