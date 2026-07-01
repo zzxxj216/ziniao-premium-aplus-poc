@@ -235,6 +235,43 @@ return deepAll(function(n){
 """
 # 所有可见空输入框(用于"本模块开始前已存在的空字段"快照,后续填充排除它们)
 JS_ALL_EMPTY = DEEP + "return deepAll(function(n){return (n.tagName==='INPUT'||n.tagName==='TEXTAREA')&&!(n.value||'').trim()&&n.id!=='sc-search-field';}).filter(function(n){var r=n.getBoundingClientRect&&n.getBoundingClientRect();return r&&r.width>0;});"
+# 同 JS_BY_PH_ANY 但【不管是否已填】——对比表填 ASIN 后标题被自动拉取(非空),需清空重填
+JS_BY_PH_ALL = DEEP + """
+var subs=arguments[0];
+return deepAll(function(n){
+  if(n.tagName!=='INPUT'&&n.tagName!=='TEXTAREA') return false;
+  var ph=((n.placeholder||'')+' '+((n.getAttribute&&n.getAttribute('aria-label'))||'')).toLowerCase();
+  if(!ph.trim()) return false;
+  for(var i=0;i<subs.length;i++){ if(ph.indexOf((''+subs[i]).toLowerCase())>=0) return true; }
+  return false;
+}).filter(function(n){var r=n.getBoundingClientRect&&n.getBoundingClientRect();return r&&r.width>0;});
+"""
+# 对比表产品标题的 placeholder(比较表2=Image Headline;比较表1/3=Title)
+CMP_TITLE_PH = ["enter image headline", "image headline", "输入图片标题文本", "图片标题",
+                "enter title", "输入产品标题", "产品标题"]
+
+
+def _fill_titles_clear(driver, values, exclude=None):
+    """对比表:清空自动拉取的长标题,填运营的短标题(≤30 截断)。含非空字段。"""
+    exclude = exclude or set()
+    els = [e for e in driver.execute_script(JS_BY_PH_ALL, CMP_TITLE_PH) if e not in exclude]
+    n = 0
+    for el, v in zip(els, values or []):
+        try:
+            driver.execute_script("arguments[0].scrollIntoView({block:'center'});", el)
+            el.click()
+            try:
+                el.clear()
+            except Exception:
+                pass
+            el.send_keys(bmp(v)[:30])
+            driver.execute_script("arguments[0].dispatchEvent(new Event('input',{bubbles:true}));"
+                                  "arguments[0].dispatchEvent(new Event('change',{bubbles:true}));"
+                                  "try{arguments[0].blur();}catch(e){}", el)
+            n += 1
+        except Exception:
+            pass
+    return n
 
 
 def _fill_field(driver, concept, values, exclude=None):
@@ -511,11 +548,14 @@ def create_aplus(spec, cfg_path=None):
                 # positional 兼容(填剩余空字段)
                 ft = _fill_texts(driver, m.get("texts"), exclude=excl)
                 fb = _fill_bodies(driver, m.get("bodies"), exclude=excl_body)
-                # 对比表:ASIN / 图片标题
+                # 对比表:只填 ASIN → 亚马逊自动拉取图片+标题;拉来的标题过长 → 清空改短标题
                 if m.get("asins"):
                     _fill_by_ph(driver, "输入ASIN", m["asins"], exclude=excl)
-                if m.get("img_titles"):
-                    _fill_by_ph(driver, "输入图片标题文本", m["img_titles"], exclude=excl)
+                    time.sleep(6)                          # 等按 ASIN 自动拉取图片+标题
+                    names = m.get("names") or m.get("img_titles")   # 运营给的短标题(≤25/30)
+                    if names:
+                        cleared = _fill_titles_clear(driver, names, exclude=excl)
+                        print(f"    对比表短标题填入={cleared}")
             # 再传图(背景图片用专属触发文案;排除前模块空图位)
             trigger = TRIGGER_MAP.get(m["type"], "点击添加图片")
             imgs = module_image_items(m)

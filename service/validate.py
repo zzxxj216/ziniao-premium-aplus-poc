@@ -237,8 +237,8 @@ def spec_warnings(spec):
         _warn_len(warns, tag, "正文", m.get("body"), lim.get("body"))
         for bd in (m.get("bodies") or []):
             _warn_len(warns, tag, "正文", bd, lim.get("body"))
-        for it in (m.get("img_titles") or []):
-            _warn_len(warns, tag, "图片标题", it, lim.get("img_title"))
+        for it in (m.get("names") or m.get("img_titles") or []):
+            _warn_len(warns, tag, "产品短标题", it, lim.get("img_title"))
     return warns
 
 
